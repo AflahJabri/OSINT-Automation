@@ -26,13 +26,14 @@ listings = browser.find_elements(By.CLASS_NAME, "product-list-data")
 
 # Loop through each listing
 for li in listings:
-    # Find Name of company via link tags <a> 
+    # Search for name of company via link tags <a> 
     findLink = li.find_element(By.TAG_NAME, "a")
     try:
-        findWebsite = li.find_element(By.CLASS_NAME, "companyweb")
+        # Search for <div> containing company URL
+        findWebsite = li.find_element(By.CLASS_NAME, "companyWeb")
         print("Comapany: " + findLink.text, "  URL: " + findWebsite.text)  
     except NoSuchElementException:
-        print("Company:  " + findLink.text + " has no website.")
+        print("Company: " + findLink.text + " has no website.")
 
 time.sleep(10)
 print("Search Complete...")
