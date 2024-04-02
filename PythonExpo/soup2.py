@@ -10,7 +10,7 @@ def scrapecompany_names(url):
     companies_per_page = len(soup.find_all('div', class_='product-list-item'))
 
     companynames = []
-    for page_num in range(1, num_companies // companies_per_page + 1):
+    for page_num in range(1, numcompanies // companies_per_page + 1):
         params = {'page': page_num}
         response = requests.get(url, params=params)
         soup = BeautifulSoup(response.text, 'html.parser')
