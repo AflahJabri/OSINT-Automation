@@ -9,7 +9,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import time 
 
-browser = webdriver.Chrome()
+service = Service(excutable_path="chromedriver.exe")
+browser = webdriver.Chrome(service=service)
 
 # Open broser to the specified page
 browser.get("https://www.kompass.com/z/nl/r/north-brabant/nl_30/")
@@ -31,10 +32,13 @@ for li in listings:
     try:
         # Search for <div> containing company URL
         findWebsite = li.find_element(By.CLASS_NAME, "companyWeb")
-        print("Comapany: " + findLink.text, "  URL: " + findWebsite.text)  
+        url = findWebsite.find_element(By.TAG_NAME, "a")
+        print("Comapany: " + findLink.text, "  URL: " + url.get_attribute('href'))  
     except NoSuchElementException:
         print("Company: " + findLink.text + " has no website.")
 
+
+## once done with the loop try clicking on next page, wait for 5 seconds and repeat loop
 time.sleep(10)
 print("Search Complete...")
 browser.quit()

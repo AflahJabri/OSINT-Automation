@@ -9,7 +9,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import time 
 
 
-browser = webdriver.Chrome()
+service = Service(excutable_path="chromedriver.exe")
+browser = webdriver.Chrome(service=service)
 
 # Open broser to the specified page
 browser.get("https://www.kvk.nl/zoeken/")
