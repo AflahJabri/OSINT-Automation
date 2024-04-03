@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import time 
 
-# disable automation indicators
+# Disable automation indicators on the browser
 options = webdriver.ChromeOptions()
 options.add_argument("--disable-blink-features=AutomationControlled") 
 options.add_experimental_option("excludeSwitches", ["enable-automation"]) 
@@ -45,7 +45,7 @@ for li in listings:
         print("Company: " + findLink.text + " has no website.")
 
 
-## once done with the loop try clicking on next page, wait for 5 seconds and repeat loop
+## Once done with the loop try clicking on next page, wait for 5 seconds and repeat loop
 time.sleep(10)
 print("Search Complete...")
 browser.quit()
