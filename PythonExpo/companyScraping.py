@@ -37,13 +37,15 @@ for li in listings:
     # Search for name of company via link tags <a> 
     findLink = li.find_element(By.TAG_NAME, "a")
     # Click on link and go the company specific page
-    # click(findLink)
-    # goNextPage = li.find_element(By.XPATH, "//a[div[2]/div/a]").click()
+   
+    browser.execute_script("window.open('about:blank','_blank');")
+    browser.switch_to.window(browser.window_handles[1])
+    browser.get(findLink.get_attribute('href'))
     # Once in the next page search for table row with KvK number
     findkvk = browser.find_element(By.XPATH, "//th[text()='KvK nummer']/following-sibling::td")
     kvkNumber = findkvk.text
     # Back to previous page
-    browser.back()
+    browser.close()
     try:
         # Search for <div> containing company URL
         findWebsite = li.find_element(By.CLASS_NAME, "companyWeb")
@@ -58,6 +60,9 @@ for li in listings:
 time.sleep(10)
 print("Search Complete...")
 browser.quit()
+
+
+
 # //*[@id="seoProdListNLN0672591"]/div/div[2]/div
 # /html/body/main/div/div[2]/div/div/div[2]/section[2]/div[3]/div[1]/div/div[2]/div/a
 # /html/body/main/div/div[2]/div/div/div[2]/section[2]/div[3]/div[1]/div
