@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.actions.action_builder import ActionBuilder
 import time 
 
 # Disable automation indicators on the browser
@@ -23,7 +24,6 @@ browser.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () =
 browser.get("https://www.kompass.com/z/nl/r/north-brabant/nl_30/")
 time.sleep(10)
 print("Searching through: " + browser.title)
-
 # Wait for company listing to be present on the webpage
 listElement = WebDriverWait(browser, 5).until(
     EC.presence_of_element_located((By.ID, "resultatDivId"))
@@ -36,10 +36,13 @@ listings = browser.find_elements(By.CLASS_NAME, "product-list-data")
 for li in listings:
     # Search for name of company via link tags <a> 
     findLink = li.find_element(By.TAG_NAME, "a")
-    # click on link and go the company specific page
-    findLink.click()
+    # Click on link and go the company specific page
+    # click(findLink)
+    # goNextPage = li.find_element(By.XPATH, "//a[div[2]/div/a]").click()
+    # Once in the next page search for table row with KvK number
     findkvk = browser.find_element(By.XPATH, "//th[text()='KvK nummer']/following-sibling::td")
     kvkNumber = findkvk.text
+    # Back to previous page
     browser.back()
     try:
         # Search for <div> containing company URL
@@ -55,5 +58,6 @@ for li in listings:
 time.sleep(10)
 print("Search Complete...")
 browser.quit()
-
-
+# //*[@id="seoProdListNLN0672591"]/div/div[2]/div
+# /html/body/main/div/div[2]/div/div/div[2]/section[2]/div[3]/div[1]/div/div[2]/div/a
+# /html/body/main/div/div[2]/div/div/div[2]/section[2]/div[3]/div[1]/div
