@@ -6,7 +6,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.actions.action_builder import ActionBuilder
 import time 
 
 # Disable automation indicators on the browser
@@ -38,7 +37,7 @@ for li in listings:
     findLink = li.find_element(By.TAG_NAME, "a")
     # Click on link and go the company specific page
     hyperLink = findLink.get_attribute('href')
-    browser.execute_script(f"window.open('{hyperLink}';")
+    browser.execute_script(f"window.open('{hyperLink}', '_blank');")
     newTab = browser.window_handles[-1]
     browser.switch_to.window(newTab)
     # Once in the next page search for table row with KvK number
