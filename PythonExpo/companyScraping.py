@@ -37,10 +37,10 @@ for li in listings:
     # Search for name of company via link tags <a> 
     findLink = li.find_element(By.TAG_NAME, "a")
     # Click on link and go the company specific page
-   
-    browser.execute_script("window.open('about:blank','_blank');")
-    browser.switch_to.window(browser.window_handles[1])
-    browser.get(findLink.get_attribute('href'))
+    hyperLink = findLink.get_attribute('href')
+    browser.execute_script(f"window.open('{hyperLink}';")
+    newTab = browser.window_handles[-1]
+    browser.switch_to.window(newTab)
     # Once in the next page search for table row with KvK number
     findkvk = browser.find_element(By.XPATH, "//th[text()='KvK nummer']/following-sibling::td")
     kvkNumber = findkvk.text
