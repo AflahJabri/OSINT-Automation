@@ -37,22 +37,6 @@ for li in listings:
     findLink = li.find_element(By.TAG_NAME, "a")
     # Click on link and go the company specific page
     findDiv = li.find_element(By.CLASS_NAME, 'row rowTop')
-    findNextPage = findDiv.find_element(By.TAG_NAME, "a")
-    findNextPage.click()
-    
-    # dynamicURL = findLink.get_attribute('href')
-    # fullURL = baseURL + dynamicURL
-    
-    # print("link : " + fullURL)
-    # browser.execute_script(f"window.open(arguments[0], '_blank');", fullURL)
-    # newTab = browser.window_handles[-1]
-    # browser.switch_to.window(newTab)
-    # Once in the next page search for table row with KvK number
-    # findkvk = browser.find_element(By.XPATH, "//th[text()='KvK nummer']/following-sibling::td")
-    # kvkNumber = findkvk.text
-    # Back to previous page
-    time.sleep(3)
-    browser.close()
     time.sleep(2)
     try:
         # Search for <div> containing company URL
@@ -75,3 +59,19 @@ browser.quit()
 # /html/body/main/div/div[2]/div/div/div[2]/section[2]/div[3]/div[1]/div/div[2]/div/a
 # /html/body/main/div/div[2]/div/div/div[2]/section[2]/div[3]/div[1]/div
 
+# findNextPage = findDiv.find_element(By.TAG_NAME, "a")
+#     findNextPage.click()
+    
+#     # dynamicURL = findLink.get_attribute('href')
+#     # fullURL = baseURL + dynamicURL
+    
+#     # print("link : " + fullURL)
+#     # browser.execute_script(f"window.open(arguments[0], '_blank');", fullURL)
+#     # newTab = browser.window_handles[-1]
+#     # browser.switch_to.window(newTab)
+#     # Once in the next page search for table row with KvK number
+#     # findkvk = browser.find_element(By.XPATH, "//th[text()='KvK nummer']/following-sibling::td")
+#     # kvkNumber = findkvk.text
+#     # Back to previous page
+#     time.sleep(3)
+#     browser.close()
