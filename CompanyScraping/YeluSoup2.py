@@ -7,7 +7,7 @@ def get_business_list(baseURL, max_pages=100, delay=1):
     businesses = []
     
     for page in range(1, max_pages + 1):
-        url = f"{baseURL}?page={page}"
+        url = f"{baseURL}/{page}"
         response = requests.get(url)
         
         # Check if the page was retrieved successfully
@@ -36,7 +36,7 @@ def get_business_list(baseURL, max_pages=100, delay=1):
 
 # Example usage
 baseURL = 'https://www.yelu.nl/location/s_Hertogenbosch'
-business_list = get_business_list(base_url, delay=3)  
+business_list = get_business_list(baseURL, delay=3)  
 
 for business in business_list:
     print(business)
