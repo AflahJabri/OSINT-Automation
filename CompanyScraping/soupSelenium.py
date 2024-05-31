@@ -1,5 +1,6 @@
 import time
 import random
+import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -7,6 +8,8 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import psycopg2
 from psycopg2 import sql
+from selenium.common.exceptions import NoSuchElementException
+
 
 def get_business_list(base_url, max_pages=100, delay=1):
     businesses = []
@@ -19,7 +22,7 @@ def get_business_list(base_url, max_pages=100, delay=1):
     chrome_options.add_argument("--disable-dev-shm-usage")
 
     # Create a new instance of the Chrome driver
-    driver = webdriver.Chrome(service=Service("chromedriver.exe"), options=chrome_options)
+    driver = webdriver.Chrome(service=Service(), options=chrome_options)
 
     for page in range(1, max_pages + 1):
         url = f"{base_url}?page={page}"
@@ -110,7 +113,7 @@ def save_to_postgresql(businesses):
 
 # Example usage
 base_url = 'https://www.yelu.nl/location/s_Hertogenbosch'
-business_list = get_business_list(base_url, max_pages=50, delay=2)
+business_list = get_business_list(base_url, max_pages=4, delay=2)
 save_to_postgresql(business_list)
 
 for business in business_list:
