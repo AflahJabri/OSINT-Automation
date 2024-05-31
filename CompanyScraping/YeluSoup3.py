@@ -87,9 +87,9 @@ def save_to_postgresql(businesses):
     try:
         # Connect to PostgreSQL
         conn = psycopg2.connect(
-            dbname="company_data",
-            user="your_username",
-            password="your_password",
+            dbname="postgres",
+            user="postgres",
+            password="password",
             host="localhost",
             port="5432"
         )
