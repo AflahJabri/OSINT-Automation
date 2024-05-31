@@ -3,14 +3,14 @@ from bs4 import BeautifulSoup
 import time
 import random
 
-def get_business_list(baseURL, max_pages=100, delay=1):
+def get_business_list(baseURL, max_pages=250, delay=1):
     businesses = []
     
     for page in range(1, max_pages + 1):
-        url = f"{baseURL}/{page}"
+        url = f"{baseURL}?page={page}"
         response = requests.get(url)
         
-        # Check if the page was retrieved successfully
+        # Checking if the page was retrieved successfully
         if response.status_code != 200:
             print(f"Failed to retrieve page {page}")
             break
@@ -29,14 +29,14 @@ def get_business_list(baseURL, max_pages=100, delay=1):
             address = business.find('div', class_='address').text.strip()
             businesses.append({'name': name, 'address': address})
         
-        # Add delay between requests
+        # Adding delay between requests
         time.sleep(delay + random.uniform(0, delay))
     
     return businesses
 
-# Example usage
+
 baseURL = 'https://www.yelu.nl/location/s_Hertogenbosch'
-business_list = get_business_list(baseURL, delay=3)  
+business_list = get_business_list(baseURL, delay=6)  
 
 for business in business_list:
     print(business)
