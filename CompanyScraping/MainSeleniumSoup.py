@@ -134,10 +134,10 @@ def save_to_postgresql(businesses):
     except Exception as e:
         print(f"Error: {e}")
 
-# Example usage
+
 base_url = 'https://www.yelu.nl/location/s_Hertogenbosch'
-business_list = get_business_list(base_url, max_pages=4, delay=4)
+business_list = get_business_list(base_url, max_pages=1, delay=2)
 save_to_postgresql(business_list)
 
-for business in business_list:
-    print(business)
+# for business in business_list:
+#     print(business)
