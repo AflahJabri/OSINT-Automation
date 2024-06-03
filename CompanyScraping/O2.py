@@ -142,9 +142,20 @@ def save_to_postgresql(businesses):
 
 # Calling functions with base_url based on city we are scraping 
 base_url = 'https://www.yelu.nl/location/s_Hertogenbosch'
-business_list = get_business_list(base_url, max_pages=1, delay=2)
+business_list = get_business_list(base_url, max_pages=3, delay=1)
 save_to_postgresql(business_list)
 
+base_url = 'https://www.yelu.nl/location/Eindhoven'
+business_list = get_business_list(base_url, max_pages=3, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Tilburg'
+business_list = get_business_list(base_url, max_pages=3, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Helmond'
+business_list = get_business_list(base_url, max_pages=3, delay=1)
+save_to_postgresql(business_list)
 # Uncomment the lines below to print the business list
 # for business in business_list:
 #     print(business)
