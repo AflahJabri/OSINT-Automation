@@ -134,7 +134,59 @@ def save_to_postgresql(businesses):
     except Exception as e:
         print(f"Error: {e}")
 
-# Main execution
+# Execution
 base_url = 'https://www.yelu.nl/location/s_Hertogenbosch'
-business_list = get_business_list(base_url, max_pages=1, delay=1)
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Eindhoven'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Tilburg'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Helmond'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Boxtel'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Best'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Breda'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Roosendaal'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Oosterhout'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Sint-michielsgestel'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Geertruidenberg'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Eersel'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Steenbergen'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
+save_to_postgresql(business_list)
+
+base_url = 'https://www.yelu.nl/location/Rucphen'
+business_list = get_business_list(base_url, max_pages=2, delay=1)
 save_to_postgresql(business_list)
