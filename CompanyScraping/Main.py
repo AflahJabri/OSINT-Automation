@@ -134,6 +134,7 @@ def save_to_postgresql(businesses):
     except Exception as e:
         print(f"Error: {e}")
 
+# Function to excute scraping and save to postgres
 def scrape_and_save(base_urls, max_pages=2, delay=1):
     for base_url in base_urls:
         print(f"Processing URL: {base_url}")
@@ -195,7 +196,7 @@ base_urls = [
 ]
 
 # Execute the scraping and saving process
-scrape_and_save(base_urls, max_pages=1, delay=1)
+scrape_and_save(base_urls, max_pages=2, delay=1)
 
 
 
