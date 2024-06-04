@@ -134,59 +134,128 @@ def save_to_postgresql(businesses):
     except Exception as e:
         print(f"Error: {e}")
 
-# Execution
-base_url = 'https://www.yelu.nl/location/s_Hertogenbosch'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
+def scrape_and_save(base_urls, max_pages=2, delay=1):
+    for base_url in base_urls:
+        print(f"Processing URL: {base_url}")
+        business_list = get_business_list(base_url, max_pages, delay)
+        save_to_postgresql(business_list)
 
-base_url = 'https://www.yelu.nl/location/Eindhoven'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
+# List of URLs to scrape
+base_urls = [
+'https://www.yelu.nl/location/s_Hertogenbosch',
+'https://www.yelu.nl/location/Oss',
+'https://www.yelu.nl/location/Oisterwijk',
+'https://www.yelu.nl/location/Waalwijk',
+'https://www.yelu.nl/location/Grave',
+'https://www.yelu.nl/location/Heusden',
+'https://www.yelu.nl/location/Bergeijk',
+'https://www.yelu.nl/location/Bergen_op_Zoom',
+'https://www.yelu.nl/location/Bladel',
+'https://www.yelu.nl/location/Boxmeer',
+'https://www.yelu.nl/location/Boxtel',
+'https://www.yelu.nl/location/Best',
+'https://www.yelu.nl/location/Breda',
+'https://www.yelu.nl/location/Cuijk',
+'https://www.yelu.nl/location/Deurne',
+'https://www.yelu.nl/location/Dongen',
+'https://www.yelu.nl/location/Drimmelen',
+'https://www.yelu.nl/location/Eersel',
+'https://www.yelu.nl/location/Eindhoven',
+'https://www.yelu.nl/location/Etten_leur',
+'https://www.yelu.nl/location/Geertruidenberg',
+'https://www.yelu.nl/location/Geldrop',
+'https://www.yelu.nl/location/Gemert_bakel',
+'https://www.yelu.nl/location/Goirle',
+'https://www.yelu.nl/location/Helmond',
+'https://www.yelu.nl/location/Heusden',
+'https://www.yelu.nl/location/Loon_op_zand',
+'https://www.yelu.nl/location/Moerdijk',
+'https://www.yelu.nl/location/Nuenen',
+'https://www.yelu.nl/location/Oirschot',
+'https://www.yelu.nl/location/Oisterwijk',
+'https://www.yelu.nl/location/Oosterhout',
+'https://www.yelu.nl/location/Roosendaal',
+'https://www.yelu.nl/location/Rucphen',
+'https://www.yelu.nl/location/Schijndel',
+'https://www.yelu.nl/location/Sint_michielsgestel',
+'https://www.yelu.nl/location/Sint_oedenrode',
+'https://www.yelu.nl/location/Someren',
+'https://www.yelu.nl/location/Steenbergen',
+'https://www.yelu.nl/location/Tilburg',
+'https://www.yelu.nl/location/Uden',
+'https://www.yelu.nl/location/Valkenswaard',
+'https://www.yelu.nl/location/Veghel',
+'https://www.yelu.nl/location/Veldhoven',
+'https://www.yelu.nl/location/Vught',
+'https://www.yelu.nl/location/Waalwijk',
+'https://www.yelu.nl/location/Werkendam',
+'https://www.yelu.nl/location/Woensdrecht',
+'https://www.yelu.nl/location/Woudrichem',
+'https://www.yelu.nl/location/Zundert'
+]
 
-base_url = 'https://www.yelu.nl/location/Tilburg'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
+# Execute the scraping and saving process
+scrape_and_save(base_urls, max_pages=1, delay=1)
 
-base_url = 'https://www.yelu.nl/location/Helmond'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
 
-base_url = 'https://www.yelu.nl/location/Boxtel'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
 
-base_url = 'https://www.yelu.nl/location/Best'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
 
-base_url = 'https://www.yelu.nl/location/Breda'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
 
-base_url = 'https://www.yelu.nl/location/Roosendaal'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
 
-base_url = 'https://www.yelu.nl/location/Oosterhout'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
 
-base_url = 'https://www.yelu.nl/location/Sint-michielsgestel'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
 
-base_url = 'https://www.yelu.nl/location/Geertruidenberg'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
 
-base_url = 'https://www.yelu.nl/location/Eersel'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
+# List of cities in North Brabant and the number of companies in thousands:
 
-base_url = 'https://www.yelu.nl/location/Steenbergen'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
+# https://www.yelu.nl/location/s_Hertogenbosch 4.48
+# https://www.yelu.nl/location/Oss 3.20
+# https://www.yelu.nl/location/Oisterwijk 1.36
+# https://www.yelu.nl/location/Waalwijk 2.23
+# https://www.yelu.nl/location/Grave 0.34
+# https://www.yelu.nl/location/Heusden 0.06
+# https://www.yelu.nl/location/Bergeijk 0.78
+# https://www.yelu.nl/location/Bergen_op_Zoom 2.51
+# https://www.yelu.nl/location/Bladel 0.79
+# https://www.yelu.nl/location/Boxmeer 0.65
+# https://www.yelu.nl/location/Boxtel 1.32
+# https://www.yelu.nl/location/Best 1.68
+# https://www.yelu.nl/location/Breda 8.9
+# https://www.yelu.nl/location/Cuijk 0.97
+# https://www.yelu.nl/location/Deurne 1.44
+# https://www.yelu.nl/location/Dongen 1.17
+# https://www.yelu.nl/location/Drimmelen 0.73
+# https://www.yelu.nl/location/Eersel 0.72
+# https://www.yelu.nl/location/Eindhoven 11.75
+# https://www.yelu.nl/location/Etten_leur 2.27
+# https://www.yelu.nl/location/Geertruidenberg 0.26
+# https://www.yelu.nl/location/Geldrop 1.39
+# https://www.yelu.nl/location/Gemert_bakel 0.002
+# https://www.yelu.nl/location/Goirle 0.96
+# https://www.yelu.nl/location/Helmond 4.34
+# https://www.yelu.nl/location/Heusden 0.06
+# https://www.yelu.nl/location/Loon_op_zand 0.30
+# https://www.yelu.nl/location/Moerdijk 0.32
+# https://www.yelu.nl/location/Nuenen 1.48
+# https://www.yelu.nl/location/Oirschot 0.83
+# https://www.yelu.nl/location/Oisterwijk 1.36
+# https://www.yelu.nl/location/Oosterhout 2.38
+# https://www.yelu.nl/location/Roosendaal 3.49
+# https://www.yelu.nl/location/Rucphen 0.28
+# https://www.yelu.nl/location/Schijndel 1.45
+# https://www.yelu.nl/location/Sint_michielsgestel 0.57
+# https://www.yelu.nl/location/Sint_oedenrode 0.93
+# https://www.yelu.nl/location/Someren 1.07
+# https://www.yelu.nl/location/Steenbergen 0.006
+# https://www.yelu.nl/location/Tilburg 8.52
+# https://www.yelu.nl/location/Uden 2.29
+# https://www.yelu.nl/location/Valkenswaard 1.98
+# https://www.yelu.nl/location/Veghel 1.92
+# https://www.yelu.nl/location/Veldhoven 2.19
+# https://www.yelu.nl/location/Vught 1.43
+# https://www.yelu.nl/location/Waalwijk 2.23
+# https://www.yelu.nl/location/Werkendam 0.98
+# https://www.yelu.nl/location/Woensdrecht 0.07
+# https://www.yelu.nl/location/Woudrichem 0.21
+# https://www.yelu.nl/location/Zundert 0.67
 
-base_url = 'https://www.yelu.nl/location/Rucphen'
-business_list = get_business_list(base_url, max_pages=2, delay=1)
-save_to_postgresql(business_list)
+# estimated total number of companies = 91,318 
