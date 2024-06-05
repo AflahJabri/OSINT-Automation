@@ -135,7 +135,7 @@ def save_to_postgresql(businesses):
         print(f"Error: {e}")
 
 # Function to excute scraping and save to postgres
-def scrape_and_save(base_urls, max_pages=2, delay=1):
+def scrape_and_save(base_urls, max_pages=2, delay=1): 
     for base_url in base_urls:
         print(f"Processing URL: {base_url}")
         business_list = get_business_list(base_url, max_pages, delay)
@@ -196,7 +196,7 @@ base_urls = [
 ]
 
 # Execute the scraping and saving process
-scrape_and_save(base_urls, max_pages=2, delay=1)
+scrape_and_save(base_urls, max_pages=590, delay=0.5)
 
 
 
