@@ -155,7 +155,7 @@ base_urls = [
 'https://www.yelu.nl/location/Boxmeer',
 'https://www.yelu.nl/location/Boxtel',
 'https://www.yelu.nl/location/Best',
-'https://www.yelu.nl/location/Breda',
+'https://www.yelu.nl/location/Breda',# checkpoint 1, 18 hours 
 'https://www.yelu.nl/location/Cuijk',
 'https://www.yelu.nl/location/Deurne',
 'https://www.yelu.nl/location/Dongen',
