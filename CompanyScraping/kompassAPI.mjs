@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-const url = "https://kompassapi.shinystat.com/cgi-bin/kimpress.cgi?company=NLC9987504,NLC9987242,NLC9986887,NLC9986906,NLC9986843,NLC9986143,NLC9986438,NLC9985387,NLC9985545,NLC9984605,NLC9984923,NLC9985199,NLC9984884,NLC9985164,NLC9984636,NLC9983446,NLC9983438,NLC9983662,NLC9983667,NLC9983686,NLC9983112,NLC9983337,NLC9982458,NLC9982307,NLC9982080,NLC9981826,NLC9982084,NLC9982127,NLC9981876,NLC9982072,NLC9981344,NLC9981554,NLC9981128,NLC9980670,NLC9980878,NLC9980484,NLC9980723,NLC9979891,NLC9980052,NLC9979956,NLC9979935,NLC9979297,NLC9979476,NLC9979417,NLC9978851,NLC9978177,NLC9978242,NLC9977677,NLC9977675,NLC9977763,NLC9977156,NLC9976881,NLC9976763,NLC9977230,NLC9976678,NLC9976687,NLC9976832,NLC9976872,NLC9976808,NLC9976538,NLC9975582,NLC9975713,NLC9975451,NLC9975709,NLC9975009,NLC9974944,NLC9974715,NLC9974710,NLC9973771,NLC9973981,NLC9973667,NLC9974082,NLC9973888,NLC9974165,NLC9973682,NLC9974216,NLC9974069,NLC9973603,NLC9973080,NLC9973591,NLC9973123";
+const url = "https://kompassapi.shinystat.com/cgi-bin/kimpress.cgi?company=NLC9987504,NLC9987242";
 
 fetch(url, {
   method: 'GET',
@@ -8,14 +8,24 @@ fetch(url, {
     'Content-Type': 'application/json'
   }
 })
-.then(response => {
+.then(async response => {
   if (!response.ok) {
     throw new Error('Network response was not ok ' + response.statusText);
   }
-  return response.json();
+
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    return response.json();
+  } else {
+    return response.text();
+  }
 })
 .then(data => {
-  console.log(data);
+  if (typeof data === 'string') {
+    console.log('Received text data:', data);
+  } else {
+    console.log('Received JSON data:', data);
+  }
 })
 .catch(error => {
   console.error('There has been a problem with your fetch operation:', error);
