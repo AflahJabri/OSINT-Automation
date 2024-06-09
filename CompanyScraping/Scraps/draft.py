@@ -96,10 +96,10 @@ def get_company_details(company_page_url):
             return None, None
 
         soup = BeautifulSoup(response.content, 'html.parser')
-        website_tag = soup.find('div', class_='text weblinks')
+        website_tag = soup.find('div', class_='text weblinks').find('a')
         phone_tag = soup.find('div', class_='text phone')
 
-        website_url = website_tag.find('a')['href'] if website_tag and website_tag.find('a') else None
+        website_url = website_tag['href'] if website_tag and 'href' in website_tag.attrs else None
         phone = phone_tag.text.strip() if phone_tag else None
 
         return website_url, phone
@@ -134,7 +134,7 @@ def save_to_postgresql(businesses):
     except Exception as e:
         print(f"Error: {e}")
 
-# Function to execute scraping and save to postgres
+# Function to excute scraping and save to postgres
 def scrape_and_save(base_urls, max_pages=2, delay=1): 
     for base_url in base_urls:
         print(f"Processing URL: {base_url}")
@@ -147,7 +147,8 @@ base_urls = [
 ]
 
 # Execute the scraping and saving process
-scrape_and_save(base_urls, max_pages=2, delay=0.5)
+scrape_and_save(base_urls, max_pages=590, delay=0.5)
+
 
 
 
