@@ -75,9 +75,6 @@ def search_kvk(driver, name, address):
         except Exception as e:
             logging.error('Failed to type into the search bar or press Enter')
             logging.error(e)
-            with open("page_source.html", "w", encoding="utf-8") as f:
-                f.write(driver.page_source)
-            driver.save_screenshot("screenshot.png")
             return None, None, None, None
 
         WebDriverWait(driver, 5).until(
