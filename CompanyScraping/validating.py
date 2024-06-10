@@ -36,8 +36,6 @@ def fetch_companies():
         return []
 
 def extract_street_name(full_address):
-    # Extracts the street name from the full address.
-    # Assuming the street name is the part of the address before the first comma or numeric sequence.
     match = re.match(r"^([\w\s]+ \d+)", full_address)
     if match:
         return match.group(1).strip()
@@ -58,48 +56,44 @@ def search_kvk(driver, name, address):
         logging.info(f"Searching KVK for {name}, {address}")
         driver.get("https://www.kvk.nl/zoeken")
 
-        # Accept cookies
         accept_cookies(driver)
 
-        # Add a small delay to ensure dynamic elements are loaded
         time.sleep(3)
 
         try:
-            # Switch to the active element (search bar) and clear it
             active_element = driver.switch_to.active_element
-            active_element.send_keys(Keys.CONTROL + "a")  # Select all text
-            active_element.send_keys(Keys.DELETE)  # Delete selected text
+            active_element.send_keys(Keys.CONTROL + "a")
+            active_element.send_keys(Keys.DELETE)
             logging.info("Cleared the search bar.")
 
-            # Send the name and address to the search bar and press Enter
             search_query = f"{name} {address}"
             active_element.send_keys(search_query)
             logging.info(f"Typed '{search_query}' into the search bar.")
 
-            # Press Enter key to search
             active_element.send_keys(u'\ue007')
 
         except Exception as e:
             logging.error('Failed to type into the search bar or press Enter')
             logging.error(e)
-            # Save the page source or a screenshot for debugging
             with open("page_source.html", "w", encoding="utf-8") as f:
                 f.write(driver.page_source)
             driver.save_screenshot("screenshot.png")
-            return None, None
+            return None, None, None, None
 
         WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'ul[data-ui-test-class="search-results-list"]'))
         )
         logging.info("Search results are loaded.")
 
-        time.sleep(5)  # Wait for results to load completely
+        time.sleep(5)
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         company_elements = soup.select('ul[data-ui-test-class="search-results-list"] > li')
 
         for company in company_elements:
             company_name_tag = company.find('a', class_='TextLink-module_textlink__1SZwI')
             company_address_tag = company.find('li', class_='icon-locationLargeIcon')
+            kvk_number_tag = company.find('li', class_='icon-fileCertificateIcon')
+            branch_number_tag = company.find('li', class_='icon-officeBuildingIcon')
 
             if company_name_tag:
                 company_name = company_name_tag.get_text(strip=True)
@@ -107,20 +101,23 @@ def search_kvk(driver, name, address):
                     company_address = company_address_tag.get_text(strip=True)
                 else:
                     company_address = "No address found"
-                logging.info(f"Found company: {company_name}, Address: {company_address}")
-                return company_name, company_address
+                
+                kvk_number = re.search(r'\d+', kvk_number_tag.get_text()).group() if kvk_number_tag else None
+                branch_number = re.search(r'\d+', branch_number_tag.get_text()).group() if branch_number_tag else None
+
+                logging.info(f"Found company: {company_name}, Address: {company_address}, KVK Number: {kvk_number}, Branch Number: {branch_number}")
+                return company_name, company_address, kvk_number, branch_number
 
         logging.info(f"No matching company found on KVK for {name}")
-        return None, None
+        return None, None, None, None
     except TimeoutException:
-        logging.error(f"Error searching KVK for {name}")
-        return None, None
+        logging.error(f"{name} was not found")
+        return None, None, None, None
     except WebDriverException as e:
         logging.error(f"WebDriverException occurred: {e}")
-        return None, None
+        return None, None, None, None
 
-
-def update_kvk_check(company_id, status):
+def update_kvk_check(company_id, status, kvk_number=None, branch_number=None):
     try:
         conn = psycopg2.connect(
             dbname="postgres",
@@ -131,22 +128,20 @@ def update_kvk_check(company_id, status):
         )
         cursor = conn.cursor()
         cursor.execute(
-            "UPDATE companies SET kvk_check = %s WHERE id = %s",
-            (status, company_id)
+            "UPDATE companies SET kvk_check = %s, kvk_number = %s, branch_number = %s WHERE id = %s",
+            (status, kvk_number, branch_number, company_id)
         )
         conn.commit()
         cursor.close()
         conn.close()
-        logging.info(f"Updated KVK check for company ID {company_id} to {status}")
+        logging.info(f"Updated KVK check for company ID {company_id} to {status} with KVK Number {kvk_number} and Branch Number {branch_number}")
 
     except Exception as e:
         logging.error(f"Error updating kvk_check in PostgreSQL: {e}")
 
 if __name__ == "__main__":
-    # Configure Selenium WebDriver
     chrome_options = Options()
-    # Remove headless mode
-    # chrome_options.add_argument("--headless")  # Comment out or remove this line
+    # chrome_options.add_argument("--headless")  # Uncomment to run in headless mode
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
@@ -162,31 +157,29 @@ if __name__ == "__main__":
 
     driver = webdriver.Chrome(service=Service(), options=chrome_options)
 
-    # Fetch the data from the database
     companies = fetch_companies()
     logging.info(f"Fetched {len(companies)} companies from the database.")
     
-    # Validate the addresses and update the database
     for company_id, name, address in companies:
         retries = 3
         for attempt in range(retries):
             try:
-                kvk_name, kvk_address = search_kvk(driver, name, address)
+                kvk_name, kvk_address, kvk_number, branch_number = search_kvk(driver, name, address)
                 if kvk_address:
                     db_street = extract_street_name(address)
                     kvk_street = extract_street_name(kvk_address)
                     logging.info(f"Database street: {db_street.lower()}")
                     logging.info(f"KVK street: {kvk_street.lower()}")
                     if db_street.lower() == kvk_street.lower():
-                        update_kvk_check(company_id, "PASS")
+                        update_kvk_check(company_id, "PASS", kvk_number, branch_number)
                         logging.info(f"Company {name} with ID {company_id} passed the KVK check.")
                         break
                     else:
-                        update_kvk_check(company_id, "FAIL")
+                        update_kvk_check(company_id, "FAIL", kvk_number, branch_number)
                         logging.info(f"Company {name} with ID {company_id} failed the KVK check.")
                         break
                 else:
-                    update_kvk_check(company_id, "FAIL")
+                    update_kvk_check(company_id, "FAIL", kvk_number, branch_number)
                     logging.info(f"Company {name} with ID {company_id} failed the KVK check.")
                     break
             except Exception as e:
