@@ -4,6 +4,10 @@ import requests
 import psycopg2
 from urllib.parse import urlparse
 from datetime import datetime
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # PostgreSQL connection details
 db_config = {
@@ -25,7 +29,7 @@ def get_whois_info(domain):
         w = whois.whois(domain)
         return w
     except Exception as e:
-        print(f"Failed to retrieve WHOIS for {domain}: {e}")
+        logging.error(f"Failed to retrieve WHOIS for {domain}: {e}")
         return None
 
 # Function to geolocate IP address
@@ -34,7 +38,7 @@ def geolocate_ip(ip):
         response = requests.get(f"https://geolocation-db.com/json/{ip}&position=true").json()
         return response
     except Exception as e:
-        print(f"Failed to geolocate IP {ip}: {e}")
+        logging.error(f"Failed to geolocate IP {ip}: {e}")
         return None
 
 # Function to create the table if it does not exist
@@ -50,7 +54,6 @@ def create_table_if_not_exists(conn):
                 city TEXT,
                 latitude FLOAT,
                 longitude FLOAT,
-                ipv4 TEXT,
                 continent TEXT,
                 postal TEXT,
                 registrar TEXT,
@@ -73,11 +76,11 @@ def save_to_db(conn, data):
     with conn.cursor() as cursor:
         insert_query = """
             INSERT INTO url_info (
-                url, ip, country_name, state, city, latitude, longitude, ipv4, continent, postal,
+                url, ip, country_name, state, city, latitude, longitude, continent, postal,
                 registrar, creation_date, expiration_date, updated_date, organization, whois_country,
                 whois_state, whois_city, whois_email, whois_phone
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         cursor.executemany(insert_query, data)
         conn.commit()
@@ -102,19 +105,18 @@ def process_urls(db_config):
         whois_info = get_whois_info(domain)
         
         if not whois_info:
-            print(f"No WHOIS information for {domain}")
+            logging.info(f"No WHOIS information for {domain}")
             continue
         
         try:
             ip = socket.gethostbyname(domain)
         except socket.gaierror as e:
-            print(f"Could not resolve domain {domain}: {e}")
+            logging.error(f"Could not resolve domain {domain}: {e}")
             continue
         
         geolocation = geolocate_ip(ip)
         
         if geolocation:
-            # Handle multiple dates in WHOIS information
             creation_date = whois_info.creation_date
             expiration_date = whois_info.expiration_date
             updated_date = whois_info.updated_date
@@ -134,7 +136,6 @@ def process_urls(db_config):
                 geolocation.get('city'),
                 geolocation.get('latitude'),
                 geolocation.get('longitude'),
-                geolocation.get('IPv4'),
                 geolocation.get('continent_name'),
                 geolocation.get('postal'),
                 whois_info.registrar,
@@ -149,9 +150,9 @@ def process_urls(db_config):
                 whois_info.phone[0] if whois_info.phone else None
             )
             results.append(result)
-            print(f"Processed {url}: {result}")
+            logging.info(f"Processed {url}: {result}")
         else:
-            print(f"Could not geolocate IP for {url}")
+            logging.info(f"Could not geolocate IP for {url}")
 
     save_to_db(conn, results)
     conn.close()
