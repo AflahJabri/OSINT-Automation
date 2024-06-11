@@ -12,7 +12,7 @@ db_config = {
     'port': '5432'
 }
 
-# VirusTotal API key
+# VirusTotal Public API key
 virustotal_api_key = '975d1bead13442d3d7107e3ce5ede37cfc5d6062cbd6d9fd5ff9f98b8f2db2a4'
 
 # Function to extract domain from URL
