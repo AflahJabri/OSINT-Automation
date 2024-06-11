@@ -5,9 +5,6 @@ import psycopg2
 from urllib.parse import urlparse
 from datetime import datetime
 
-# List of URLs for proof of concept
-urls = ["https://www.asml.com", "https://www.philips.com", "https://www.nextbestbarber.com"]
-
 # PostgreSQL connection details
 db_config = {
     'dbname': 'postgres',
@@ -85,11 +82,21 @@ def save_to_db(conn, data):
         cursor.executemany(insert_query, data)
         conn.commit()
 
+# Function to fetch URLs from companies table
+def fetch_urls_from_db(conn):
+    with conn.cursor() as cursor:
+        cursor.execute("""
+            SELECT url FROM companies WHERE kvk_check = 'PASS' AND url IS NOT NULL AND url != ''
+        """)
+        rows = cursor.fetchall()
+        return [row[0] for row in rows]
+
 # Main function to process URLs
-def process_urls(urls, db_config):
+def process_urls(db_config):
     conn = psycopg2.connect(**db_config)
+    urls = fetch_urls_from_db(conn)
     results = []
-    
+
     for url in urls:
         domain = extract_domain(url)
         whois_info = get_whois_info(domain)
@@ -150,4 +157,4 @@ def process_urls(urls, db_config):
     conn.close()
 
 # Run the proof of concept
-process_urls(urls, db_config)
+process_urls(db_config)
