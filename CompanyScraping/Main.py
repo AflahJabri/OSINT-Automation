@@ -120,6 +120,20 @@ def save_to_postgresql(businesses):
         )
         cursor = conn.cursor()
 
+        # Create table if it doesn't exist
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS companies (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            address VARCHAR(255) NOT NULL,
+            url VARCHAR(255),
+            phone VARCHAR(50),
+            UNIQUE (name, address)
+        );
+        """
+        cursor.execute(create_table_query)
+
+        # Insert data into the table
         for business in businesses:
             cursor.execute(
                 sql.SQL("INSERT INTO companies (name, address, url, phone) VALUES (%s, %s, %s, %s) ON CONFLICT (name, address) DO NOTHING"),

@@ -1,42 +1,18 @@
 import nmap
-import psycopg2
-from psycopg2 import Error
 
-try:
-    # Initialize nmap
-    nmScan = nmap.PortScanner()
+# Initialize the PortScanner
+nm = nmap.PortScanner()
 
-    # List of targets 
-    targets = ['psv.nl', 'hightechcampus.com', 'asml.com', 'philips-museum.com']
+# Scan localhost
+nm.scan('127.0.0.1', '22-443')
 
-    # Initiaize scan
-    for target in targets:
-        # Scan each target from the list
-        nmScan.scan(hosts=target)
-
-    # Connect to PostgreSQL
-    conn = psycopg2.connect(
-        host="localhost",
-        database='nmap_scans',
-        user="postgres",
-        password="postgres"
-    )
-
-    with conn.cursor() as cursor:
-        # Insert scan results into PostgreSQL
-        for host in nmScan.all_hosts():
-            state = nmScan[host].state()
-            cursor.execute("INSERT INTO scan_results (ip_address, state) VALUES (%s, %s)", (host, state))
-        conn.commit()
-
-except Error as e:
-    print("Error connecting to PostgreSQL:", e)
-
-except nmap.PortScannerError as e:
-    print("Nmap scan error:", e)
-
-finally:
-    # Close database connection
-    if 'conn' in locals() or 'conn' in globals():
-        conn.close()
-        print("Done!")
+# Print scan results
+print(nm.all_hosts())
+for host in nm.all_hosts():
+    print(f'Host: {host} ({nm[host].hostname()})')
+    print(f'State: {nm[host].state()}')
+    for proto in nm[host].all_protocols():
+        print(f'Protocol: {proto}')
+        lport = nm[host][proto].keys()
+        for port in lport:
+            print(f'Port: {port}\tState: {nm[host][proto][port]["state"]}')

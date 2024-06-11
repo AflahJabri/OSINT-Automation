@@ -1,3 +1,5 @@
+import os
+os.environ["PATH"] += os.pathsep + r'C:\Program Files (x86)\Nmap' # Make sure nmap is in this path to avoid issues
 import nmap
 import psycopg2
 from psycopg2 import Error
