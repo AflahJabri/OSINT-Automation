@@ -271,4 +271,4 @@ if __name__ == "__main__":
 # https://www.yelu.nl/location/Woudrichem 0.21
 # https://www.yelu.nl/location/Zundert 0.67
 
-# estimated total number of companies = 91,318 
+# estimated total number of companies = 91,318 as of 28th of May
