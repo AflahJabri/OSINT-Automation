@@ -28,9 +28,9 @@ class TestWebScraper(unittest.TestCase):
         '''
         mock_get.return_value = mock_response
 
-        url, phone = get_company_details('/company-page')
+        url, phone = get_company_details('/company/1018672/Law_More_BV')
 
-        self.assertEqual(url, 'lawandmore.nl')
+        self.assertEqual(url, 'https://lawandmore.nl')
         self.assertEqual(phone, '0403690680')
 
     @patch('psycopg2.connect')
