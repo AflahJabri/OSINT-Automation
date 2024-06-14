@@ -1,10 +1,10 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from Main import get_business_list, get_company_details, save_to_postgresql, scrape_and_save
+from Main_Scraper import get_business_list, get_company_details, save_to_postgresql, scrape_and_save
 
 class TestWebScraper(unittest.TestCase):
 
-    @patch('Main.webdriver.Chrome')
+    @patch('Main_Scraper.webdriver.Chrome')
     def test_get_business_list(self, MockChrome):
         mock_driver = MockChrome.return_value
         mock_driver.page_source = '<html></html>'
@@ -49,8 +49,8 @@ class TestWebScraper(unittest.TestCase):
         mock_cursor.close.assert_called_once()
         mock_conn.close.assert_called_once()
 
-    @patch('Main.get_business_list')
-    @patch('Main.save_to_postgresql')
+    @patch('Main_Scraper.get_business_list')
+    @patch('Main_Scraper.save_to_postgresql')
     def test_scrape_and_save(self, mock_save_to_postgresql, mock_get_business_list):
         mock_get_business_list.return_value = [{'name': 'Law & More B.V.', 'address': 'De Zaale 11, Eindhoven, Netherlands', 'url': 'https://lawandmore.nl', 'phone': '0403690680'}]
 
