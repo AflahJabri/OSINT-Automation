@@ -155,15 +155,14 @@ def scrape_and_save(base_urls, max_pages=2, delay=1):
         business_list = get_business_list(base_url, max_pages, delay)
         save_to_postgresql(business_list)
 
-# List of URLs to scrape
-base_urls = [
-'https://www.yelu.nl/location/s_Hertogenbosch',
-]
+if __name__ == "__main__":
+    # List of URLs to scrape
+    base_urls = [
+        'https://www.yelu.nl/location/s_Hertogenbosch',
+    ]
 
-# Execute the scraping and saving process
-scrape_and_save(base_urls, max_pages=5, delay=0.5)
-
-
+    # Execute the scraping and saving process
+    scrape_and_save(base_urls, max_pages=5, delay=0.5)
 
 
 
