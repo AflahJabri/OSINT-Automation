@@ -157,11 +157,11 @@ def scrape_and_save(base_urls, max_pages=2, delay=1):
 
 # List of URLs to scrape
 base_urls = [
-'https://www.yelu.nl/location/Woudrichem',
+'https://www.yelu.nl/location/s_Hertogenbosch',
 ]
 
 # Execute the scraping and saving process
-scrape_and_save(base_urls, max_pages=2, delay=0.5)
+scrape_and_save(base_urls, max_pages=5, delay=0.5)
 
 
 
