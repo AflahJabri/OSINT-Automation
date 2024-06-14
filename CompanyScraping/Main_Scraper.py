@@ -211,7 +211,7 @@ if __name__ == "__main__":
     ]
 
     # Execute the scraping and saving process
-    scrape_and_save(base_urls, max_pages=5, delay=0.5)
+    scrape_and_save(base_urls, max_pages=700, delay=0.25)
 
 
 
