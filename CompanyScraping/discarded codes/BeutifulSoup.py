@@ -8,7 +8,6 @@ response = requests.get(url)
 # Parse the HTML content
 soup = BeautifulSoup(response.content, 'html.parser')
 
-
 organization_names = soup.select('div.company-container')
 
 for org in organization_names:
