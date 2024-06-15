@@ -272,3 +272,4 @@ if __name__ == "__main__":
 # https://www.yelu.nl/location/Zundert 0.67
 
 # estimated total number of companies = 91,318 as of 28th of May
+# as of the scan performed on the 15th of June, there are 87,272 companies in North brabant 
